@@ -6,7 +6,9 @@
   "dependencies": {
     "create-react-app": "^3.4.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "redux": "^4.0.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

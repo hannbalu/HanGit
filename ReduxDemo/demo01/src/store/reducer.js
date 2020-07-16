@@ -1,5 +1,6 @@
 const defaultState={
     inputValue:'输入添加列',
+    value:'',
     list:[
         '学习react',
         '学习redux',
@@ -10,10 +11,16 @@ const defaultState={
 }
 
 export default (state = defaultState,action)=>{
+/*     let newState = JSON.parse(JSON.stringify(state)); */
     switch(action.type){
         case 'changeInputValue':
-            state.inputValue
+            state.value=action.value;
+        break;
+        case 'addItem':
+            state.list.push(state.value);
+            state.value = '';
+        break; 
     }
-    console.log(state,action);
+    console.log(state);
     return state
 }

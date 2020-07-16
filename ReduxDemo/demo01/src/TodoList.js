@@ -8,7 +8,6 @@ class TodoList extends Component {
         super(props);
         this.state=store.getState();
         store.subscribe(this.storeChange);
-        this.storeChange=this.storeChange.bind(this);
     }
 
     changeInputValue=(e)=>{
@@ -18,21 +17,30 @@ class TodoList extends Component {
         };
         store.dispatch(action)
     }
-    storeChange(){
+    storeChange=()=>{
         this.setState(store.getState());
     }
-
+    clickBtn = ()=>{
+        const action ={
+            type:'addItem',
+        }
+        store.dispatch(action);
+    }
     render() {
         const data = this.state;
         return (
             <div style={{margin:'10px'}}>
                 <div>
                     <Input 
-                        placeholder={data.inputValue} 
+                        placeholder={data.inputValue}
+                        value={data.value}
                         style={{ width:'250px',marginRight:'10px'}}
-                        onChange={this.changeInputValue}
+                        onChange={this.changeInputValue}    
                     />
-                    <Button type="primary">增加</Button>
+                    <Button 
+                        type="primary"
+                        onClick={this.clickBtn}
+                        >增加</Button>
                 </div>
                 <div style={{margin:'10px',width:'300px'}}>
                     <List
