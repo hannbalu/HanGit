@@ -21,4 +21,5 @@ function Student(name,age,code,sports){
 }
 
 var S1=new Student('Han',24,52,'basketball');
+S1.setGender('male');
 console.log(S1);

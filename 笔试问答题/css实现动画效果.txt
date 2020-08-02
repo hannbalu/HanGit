@@ -1,0 +1,4 @@
+依靠 css3 中提出的三个属性 ： transition、transform、animation
+transitio：定义元素在变化的过程，如transition-property，transition-delay、transition-duration
+transform：定义了元素变化的结果，如rotate（旋转）、scale（缩放效果）、translate
+animation：动画定义了动作的每一帧有什么效果，
