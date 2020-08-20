@@ -1,0 +1,35 @@
+<!-- //浏览器中某些如鼠标响应resize,touchmove,scroll等操作时，
+//绑定的函数触发的频率会很高，如果函数复杂，响应速度可能会跟不上触发频率
+//因此会出现卡顿，延迟，假死的现象
+
+//防抖Debounce：在事件被触发n秒后，再去执行回调函数
+//若n秒内该事件重复触发，则重新计时，将频繁触发的事件合并为一次
+//在最后一次执行 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入防抖t</title>
+</head>
+<body>
+    <div>
+        加入防抖：<input type='text' id='debounce'/>
+    </div>
+    <script>
+        window.onload=()=>{
+            function ajax(data){
+                console.log(new Date()+'-'+data)
+            }
+
+            function debounce(fn,delay){
+                clearTimeout(t);
+
+                t = setTimeout()
+            }
+
+        }
+    </script>
+</body>
+</html>
