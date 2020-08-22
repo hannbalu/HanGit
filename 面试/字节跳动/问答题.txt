@@ -1,0 +1,92 @@
+1. display 有哪些属性？inline、inline-block、block的区别？margin、padding和宽高都是哪些可以设置
+
+2. 从浏览器输入某网站地址按下回车开始，到页面完整展示出来，整个过程发生了什么？三次握手？断开连接四次挥手？
+    答：dns域名解析、TCP连接，发送http请求，返回http响应，浏览器解析渲染页面，断开连接
+        TCP连接：主机浏览器通过DNS解析得到目标服务器的ip地址，与服务器建立TCP连接
+        第一次握手：客户端将标志位SYN设置为1，随机产生一个数据包发送到服务器，客户端进入SYN_SENT状态，等待服务器确认；
+        第二次握手：服务器端收到数据包后通过SYN=1知道客户端请求建立连接，服务端将SYN和ACK都置为1，产生一个数据包发送给客户端以确认连接
+                    服务端进入SYN_RCVD
+        第三次握手：客户端收到确认后，检查ACK是否为1，如果正确则将标志位ACK置为1，并将数据包发送给服务端，服务端确认ACK为1，建立连接，
+                    客户端A可以和客户端B进行数据传输
+        第一次挥手：客户端发送一个FIN，用来关闭客户端与服务端的数据传送，客户端进入FIN_WAIT状态
+        第二次挥手：服务端收到FIN后，发送一个ACK给客户端，确认序号为收到序号+1，与SYN相同FIN占用一个序号，服务端进入CLOSE_WAIT
+        第三次挥手：服务端发送一个FIN，用来关闭服务端与客户端的数据传输，服务端进入LAST_ACK状态
+        第四次挥手：客户端收到FIN后，客户端进入TIME_WAIT状态，发送一个ACK给服务端，确认序号为收到序号+1，服务端进入CLOSE状态，断开连接
+
+3. 浏览器的渲染过程？渲染阻塞？回流和重绘（reflow，repaint）？
+    答：解析HTML文件构建DOM树：遍历文档节点，生成DOM树
+                    （在构建中可能会被css和js阻塞；注释、script标签display：none也在dom中）
+        构建CSSOM树：解析css文件，每个css文件都被解析成一个stylesheet对象
+                    （css解析可以与dom解析同时进行；css解析与script的执行互斥）
+        构建render渲染树：通过dom、cssom树，浏览器依据这两个树构建渲染树，先从dom根节点开始遍历每个可见节点，然后对每个节点找到适配的css样式规则
+                    （Render tree和dom tree 不完全对应；display：none元素不在render tree中；visibility：hidden元素在render tree中）
+        渲染树布局（layout）：从渲染树的根节点开始遍历，每个节点都是一个render object对象，包含宽高、位置、背景样式等信息，
+                            通过这些信息确定每个节点对象在页面的位置和确切大小，布局阶段即盒子模型
+                    （float元素、absolute元素、fixed元素会发生位置的偏移；脱离文档流即脱离render tree中）
+        渲染树绘制：绘制阶段，浏览器遍历渲染树，调用渲染器的paint（）方法在屏幕上显示内容，渲染树绘制工作是由浏览器UI后端组件完成
+    答：JS可以操作dom来修改dom结构，可以操作cssOM来修改节点样式，导致浏览器在遇到script标签时，dom构建会暂停，直至脚本执行完成
+        可以在脚本上增加属性defer或者async，脚本解析会将改变dom和css的地方分别解析，追加到dom树和cssom树上
+    答：重绘：当浏览器布局发生变化，需要倒回去重写渲染，reflow会从html根节点开始递归往下重写布局渲染
+        重绘：当改变某个元素背景色、文字颜色等不影响周围或内部布局的属性时，屏幕的一部分会重新渲染，元素的几何尺寸和位置不发生改变
+
+4. 引发回流？引发重绘？减少回流和重绘？
+    答：页面第一次渲染、dom tree变化（增删节点）、render tree变化（padding改变）、浏览器resize
+        回流必定引发重绘、背景色字体颜色改变（字体大小改变会引发回流）
+        避免逐个修改dom节点样式，尽量一次性修改；可以将需要多次修改的dom设置为display：none，操作完在显示，
+        
+5. BFC？如何防止css边距重叠？
+    答：块格式化上下文（block formatting context）来解决，容器内的元素不会在布局上影响外面的元素
+        BFC触发条件：根元素或者包含根元素的元素（body或html）；浮动元素；绝对定位的元素；行内块级元素；表格单元格（table-cell）；overflow值不为visible的元素
+        特性：BFC中，盒（子元素）从包含块的顶部开始在竖直方向挨个放置，兄弟元素之间的竖直距离由margin属性决定；
+            属于同一个BFC的两个相邻box的margin会叠加结果值并集；
+            每个盒子的左边外缘margin-left会触碰到包含块的做边缘border-left；
+            形成BFC的区域不会与float box重叠（避免浮动元素引发的文字环绕现象）；
+            计算BFC高度时，浮动元素也参与计算
+
+6. TCP属于传输层；HTTP属于应用层；路由器工作在网络层
+
+7. ==和===的区别？null和undefined？
+    答：===为严格运算符，==为相等运算符，后者仅判断数据的值，前者先判断数据的类型
+        作为变量赋值几乎没区别，在if语句转换中都等同于false；区别在于null表示此处不应该有值，而undefined则表达为此处应该有值但是还未定义
+
+8. 伪数组有哪些？什么是伪数组？如何将伪数组转换为真数组？
+    答：伪数组是拥有length属性，但不具有数组方法；
+        函数内部的arguments；document.getElementsByClassName()获取的DOM对象列表；
+        将伪数组遍历加入到新的空数组中，或通过call方法改变this指向给伪数组执行slice方法
+
+9.比较字符串1和字面量1做了哪些工作？
+    答：将字符串1进行了隐式类型转换
+
+10. 什么是闭包？
+    答：内部函数可以调用外部函数的参数变量及私有变量
+
+11. js 有几种作用域？
+    答：全局、局部、块级；所有没有声明直接赋值的变量都属于全局变量，块级是在{}中间部分的
+
+12. var、let、const的区别？
+    答：var声明会造成变量提升，会覆盖/污染作用域变量；let为块级声明即当前块级作用域内有效，不会污染其他作用域，let禁止重复声明，不会变量提升
+        const声明的变量为基础数据类型时，是不可变的，声明引用类型是可以修改属性的，
+
+13. 引用类型在内存中怎么存放？
+    答：引用类型存放在堆内存中，基础数据类型存放在栈当中
+
+14. Span标签可以设置宽高？设置margin、padding有效？
+    答：span为行内元素，只会根据元素的宽度自行展开，设置宽高不起作用；padding可以设置,margin只会设置左右边距
+
+15. position属性的值？分别相对谁定位？
+    答：relative：相对定位，相对于原本正常文档流的位置，原来在正常流位置也继续占有；
+        absolute：绝对定位，不脱离文档流，相对于最近一级定位不为static的父元素进行定位；
+        fixed：固定定位，相对浏览器窗口定位
+        static：默认，没有定位
+
+16. 客户端架构？MVVM模式？react？
+    答：MVC：Model-view-Controller,model模型层，view视图层，controller控制器，
+        MVP：Model-view-Presenter，model数据处理，view用户界面渲染逻辑，presenter响应视图指令，同时进行业务处理
+        两者区别：view和model完全隔离，model不再负责业务逻辑和视图变化，只负责底层数据处理，presenter负责路由和业务逻辑，
+                view层只负责发起指令和根据数据渲染ui
+        MVVM：Model View-ViewModel缩写，其中ViewModel主要靠dataBinding把view和model做了自动关联，框架替开发者实现数据变化后的视图更新
+            在view中做了数据和视图的绑定，在viewmodel中只需要更新数据，视图会自动变化
+        react：react关注视图层，核心思想是组件化，ui=fn（data），react是在虚拟DOM上进行diff运算，react-dom会把虚拟DOM渲染成浏览器中真实的dom
+
+17. cookie、localstorage、sessionStroage的区别？
+    答：

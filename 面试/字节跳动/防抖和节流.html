@@ -6,29 +6,80 @@
 //若n秒内该事件重复触发，则重新计时，将频繁触发的事件合并为一次
 //在最后一次执行 -->
 
+<!-- 节流Throttle：规定一个时间n，在n秒内将触发的事件合并为一个事件执行
+使用场景：resize，touchmove 移动dom 上拉列表加载数据等
+节流分为定时器和时间戳，区别在于定时器是在时间段内结束的时候触发，时间戳是时间段内开始的时候触发 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>加入防抖t</title>
+    <title>加入防抖、节流</title>
 </head>
 <body>
     <div>
         加入防抖：<input type='text' id='debounce'/>
+        加入节流-定时器：<input type='text' id='throttle1'/>
+        加入节流-时间戳：<input type='text' id='throttle2'/>
     </div>
     <script>
+        //防抖
         window.onload=()=>{
             function ajax(data){
-                console.log(new Date()+'-'+data)
+                console.log(new Date().toLocaleTimeString()+'-'+data)
             }
 
             function debounce(fn,delay){
-                clearTimeout(t);
-
-                t = setTimeout()
+                return (args)=>{
+                    clearTimeout(fn.t);
+                    fn.t = setTimeout(()=>{
+                        fn.call(this,args);
+                    },delay)
+                }
             }
 
+            let debounceAjax = debounce(ajax,1000);
+
+            document.querySelector('#debounce').addEventListener('keyup',e=>{
+                debounceAjax(e.target.value);
+            })
+
+            //定时器
+            function Throttle(fn,delay){
+                return args=>{
+                    if(fn.t)return
+
+                    fn.t=setTimeout(()=>{
+                        fn.call(this,args)
+                        clearTimeout(fn.t);
+                        fn.t=null;
+                    },delay)
+                }
+            }
+            let ajaxThrottle = Throttle(ajax,1000);
+            document.querySelector('#throttle1').addEventListener('keyup',e=>{
+                ajaxThrottle(e.target.value)
+            })
+
+            //时间戳
+            function throttle2(fn,delay){
+                let lastTime = 0;
+
+                return args=>{
+                    let now = Date.now();
+                    if(now>lastTime+delay){
+                        fn.call(this,args);
+                        lastTime=now;
+                    }
+                }
+            }
+
+            let throttleAjax = throttle2(ajax,1000);
+            document.querySelector('#throttle2').addEventListener('keyup',e=>{
+                throttleAjax(e.target.value);
+            })
+
+            
         }
     </script>
 </body>
