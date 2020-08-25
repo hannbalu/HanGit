@@ -22,8 +22,8 @@ function Arr(arr){
             
         }else{
             temp++;
-            j=temp-j;
-            i=temp-j;
+            i=j<arr.length?j:arr.length-1;
+            j=temp-i;
         }
     }
     return newArr

@@ -13,9 +13,9 @@ function compare(num1,num2){
         else if(arr1[i] && !arr2[i]){
             return false
         }
-        if(arr1[i]<arr2[i]){
+        if(parseInt(arr1[i])<parseInt(arr2[i])){
             return true
-        }else if(arr1[i]>arr2[i]){
+        }else if(parseInt(arr1[i])>parseInt(arr2[i])){
             return false
         }else{
             i++
@@ -30,14 +30,14 @@ function sortVersion(arr){
     let arrLeft = [];
     for(let i=0;i<arr.length;i++){
         if(compare(arr[i],midNum)){
-            arrRight.push(arr[i]);
-        }else{
             arrLeft.push(arr[i]);
+        }else{
+            arrRight.push(arr[i]);
         }
     }
     sortVersion(arrRight);
     sortVersion(arrLeft);
-    return (arrRight.concat(arrLeft))
+    return (arrLeft.concat(arrRight))
 }
 console.time();
 console.log(sortVersion(['1.45.0','1.5','6','3.3.3.3.3.3.3']));
