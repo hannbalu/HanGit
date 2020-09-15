@@ -1,4 +1,7 @@
 1. display 有哪些属性？inline、inline-block、block的区别？margin、padding和宽高都是哪些可以设置
+    答：none,block,inline,inline-block;table,table-cell,table-row,table-inline
+        block的前后元素不在一行，inline-block前后元素在同一行，但是都可以设置宽高及margin、padding
+        block可以设置；inline设置width，height无效，水平方向的padding和margin可以设置；inline-block都可以设置；
 
 2. 从浏览器输入某网站地址按下回车开始，到页面完整展示出来，整个过程发生了什么？三次握手？断开连接四次挥手？
     答：dns域名解析、TCP连接，发送http请求，返回http响应，浏览器解析渲染页面，断开连接
