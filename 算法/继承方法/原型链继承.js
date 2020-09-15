@@ -8,14 +8,21 @@
 
 function superType(){
     this.property=true;
+    this.name = 'AAA';
+    this.age = 20;
 }
 
 superType.prototype.getSuperValue=function(){
     return this.property
 }
+superType.prototype.getName=function(){
+    console.log(`${this}:${this.name} is ${this.age} years old`)
+}
 
 function subType(){
     this.subProperty=false;
+    this.name='BBB';
+    this.age=21;
 }
 
 subType.prototype=new superType();
@@ -23,6 +30,10 @@ subType.prototype=new superType();
 subType.prototype.getSubValue=function(){
     return this.subProperty
 }
+subType.prototype.getSuperValue=function(){
+    return this.name;
+}
 
 let test=new subType();
-console.log(test.getSubValue());
+console.log(test.getSuperValue());
+test.getName();
