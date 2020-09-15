@@ -1,22 +1,22 @@
-function getInter( array ,  start ) {
-    // write code here
-    if(start<1)return 0
-    if(!array)return 0
-    
+function findMax(string='ABCDDFFFEE',string2='ABCDD'){
     let result = 0;
-    let number = 0;
+    let temp = 0;
     let i =0;
-    let j =1;
-    while(array[i]){
-        if(result==start)break
-        if(array[i]!==j){
-            result++
+    let j =0;
+    let long = string.length>string2.length?string:string2;
+    let short = string.length<string2.length?string:string2;
+    while(i<long.length && j<short.length){
+        if(long[i]==short[j]){
+            temp++;
+            j++
         }else{
-            i++
+            if(temp>result)result=temp;
+            temp=0;
         }
-        j++
+        i++
     }
-    if(result>0)number=j-1
-    return number
+    if(temp>result)result=temp;
+    return result
 }
-console.log(getInter([1,2,3,4,5,6],5));
+
+console.log(findMax());
