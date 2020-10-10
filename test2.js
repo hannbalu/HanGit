@@ -1,22 +1,31 @@
-function findMax(string='ABCDDFFFEE',string2='ABCDD'){
-    let result = 0;
-    let temp = 0;
-    let i =0;
-    let j =0;
-    let long = string.length>string2.length?string:string2;
-    let short = string.length<string2.length?string:string2;
-    while(i<long.length && j<short.length){
-        if(long[i]==short[j]){
-            temp++;
-            j++
-        }else{
-            if(temp>result)result=temp;
-            temp=0;
-        }
-        i++
+function checkStr(str){
+    let arr =[];
+    for(let i=0;i<str.length;i+=3){
+        arr.push(str.slice(i,i+3).split(''));
     }
-    if(temp>result)result=temp;
-    return result
+    
+    //确认不相同的字符位置
+    let differentKey = 3;
+    let different = 0;
+    for(let i=1;i<arr.length;i++){
+        if(arr[i][0]!==arr[0][0] && differentKey!==0){
+                differentKey=0;
+                different++;
+        }
+        if(arr[i][1]!==arr[0][1] && differentKey!==1){
+                differentKey=1;
+                different++;
+        }
+        if(arr[i][2]!==arr[0][2] && differentKey!==2){
+                differentKey=2;
+                different++;
+        }
+        if(different>1){
+            console.log('No');
+            return
+        }
+    }
+    if(different<2)console.log('Yes');
 }
 
-console.log(findMax());
+checkStr('ABCABDAEC');
