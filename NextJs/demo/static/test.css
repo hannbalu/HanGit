@@ -1,0 +1,12 @@
+body{
+    color:green;
+}
+.container{
+    border:1px solid black;
+    width:500px;
+    height:500px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin:-250px -250px;
+}
